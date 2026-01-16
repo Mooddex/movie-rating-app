@@ -1,7 +1,7 @@
 <script setup>
 import * as z from "zod";
 import { useMovieStore } from "~/store/MovieStore";
-
+const toast = useToast();
 const MovieStore = useMovieStore();
 const isOpen = ref(false);
 const form = reactive({
@@ -14,11 +14,14 @@ const form = reactive({
 })
 
 
-function handleSubmit() {
+const handleSubmit = async()=> {
     const newMovie = movieSchema.safeParse(form)
     if(newMovie.success){
-        MovieStore.addMovie(newMovie.data);
-    }else{console.log(newMovie.error)}
+       await MovieStore.addMovie(newMovie.data);
+      toast.add({description:`${form.name} Has Been Added Successfully`});
+    }else{console.log(newMovie.error)
+      toast.add({title:'Error', description:`${newMovie.error}`})
+    }
 
   isOpen.value = false;
 }
@@ -34,7 +37,7 @@ const movieSchema = z.object({
 </script>
 <template>
   <UModal v-model:open="isOpen" title="Add Movie">
-    <UButton label="Add Movie" class="bg-bgBtn text-white"  />
+    <UiBtn title="Add Movie"   />
 
     <template #body>
       <form  @submit.prevent="handleSubmit" >
@@ -85,7 +88,7 @@ const movieSchema = z.object({
             <option value="action">Action</option>
             <option value="crime">Crime</option>
             <option value="drama">Drama</option>
-            <option value="action">Action</option>
+            <option value="horror">Horror</option>
             <option value="comedy">Comedy</option>
           </select>
         </div>

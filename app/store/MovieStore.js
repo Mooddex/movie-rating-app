@@ -11,7 +11,7 @@ export const useMovieStore = defineStore("movieStore", {
       return this.movies.length;
     },
     isEmpty() {
-      return this.totalCount === 0;
+      return this.totalCount === 0 
     },
     avgRating() {
       if (this.movies.length === 0) {
@@ -20,7 +20,8 @@ export const useMovieStore = defineStore("movieStore", {
       const sum = this.movies.reduce((a, c) => {
         return a + c.rating;
       }, 0);
-      return sum / this.movies.length;
+      const Avg = sum / this.movies.length;
+      return Math.round(Avg*2)/2
     },
     inTheatersMovies(){
       return this.movies.filter( m => m.inTheaters==='true' || m.inTheaters=== true )
@@ -76,10 +77,11 @@ export const useMovieStore = defineStore("movieStore", {
           await axios.put(`${api}${movie.id}`, movie);
          
         }
-       this.movies.getMovies();
+         this.movies.getMovies();
       } catch (error) {
         console.log(error);
       }
     },
+   
   },
 });

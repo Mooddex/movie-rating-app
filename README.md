@@ -21,9 +21,9 @@ bun install
 ```
 
 ## Development Server
-
 Start the development server on `http://localhost:3000`:
 
+Start the development json-server on `http://localhost:2727`
 ```bash
 # npm
 npm run dev

@@ -1,7 +1,9 @@
 <script setup>
+import { error } from "#build/ui";
 import * as z from "zod";
 import { useMovieStore } from "~/store/MovieStore";
 
+const toast = useToast();
 const props =defineProps(["movie"]);
 
 const MovieStore = useMovieStore();
@@ -16,13 +18,15 @@ const form = reactive({
   inTheaters: props.movie?.inTheaters,
 });
 
-function handleSubmit() {
+const handleSubmit =async() => {
   console.log(form)
   const movie = movieSchema.safeParse(form);
   if (movie.success) {
-    MovieStore.editMovie(movie.data);
+   await MovieStore.editMovie(movie.data);
+   toast.add({title:'success', description:`${form.name} Edited Successfully`, duration:3000});
   } else {
     console.log(movie.error);
+    toast.add({title:'Error', description:`${error}`});
   }
 
   isOpen.value = false;
@@ -93,7 +97,7 @@ const movieSchema = z.object({
               <option value="action">Action</option>
               <option value="crime">Crime</option>
               <option value="drama">Drama</option>
-              <option value="action">Action</option>
+              <option value="Horror">Horror</option>
               <option value="comedy">Comedy</option>
             </select>
           </div>

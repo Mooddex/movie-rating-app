@@ -3,8 +3,9 @@ import { useMovieStore } from "@/store/MovieStore";
 import EditMovieForm from "../EditMovieForm.vue";
 
 const props = defineProps(["movie"]);
-const MovieStore = useMovieStore();
 
+const toast = useToast();
+const MovieStore = useMovieStore();
 const rating = ref(props.movie.rating);
 
 const updateRating = async (newRating) => {
@@ -12,7 +13,26 @@ const updateRating = async (newRating) => {
 
   await MovieStore.editMovie({ ...props.movie, rating: newRating });
 };
-
+const handleDelete = (id) => {
+  toast.add({
+    title: "Confirmation",
+    description: "Are you sure you want to delete this movie?",
+    actions: [
+      {
+        label: "Yes",
+        color: "primary",
+        onClick: async() => {
+        await MovieStore.deleteMovie(id);   
+          return toast.add({ title: "Delete Request succeeded" });
+        },
+      },
+      {
+        label: "no",
+        color: "warning",
+      },
+    ],
+  });
+};
 </script>
 
 <template>
@@ -46,7 +66,7 @@ const updateRating = async (newRating) => {
         </p>
       </div>
 
-      <p class="text-gray-700">{{ movie.description }}</p>
+      <p class="text-gray-700 flex-1">{{ movie.description }}</p>
 
       <div class="flex justify-between items-center">
         <div class="flex items-center gap-2">
@@ -65,7 +85,7 @@ const updateRating = async (newRating) => {
           <UButton
             icon="i-heroicons:trash-solid"
             class="bg-gray-300 hover:bg-gray-500 rounded-full p-2 cursor-pointer"
-            @click="MovieStore.deleteMovie(movie.id)"
+            @click="handleDelete(movie.id)"
           />
         </div>
       </div>

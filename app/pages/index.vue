@@ -5,7 +5,6 @@ const filter = ref("all");
 const MovieStore = useMovieStore();
 MovieStore.getMovies();
 const isLoading = computed(() => MovieStore.isLoading);
-const isEmpty = computed(() => MovieStore.isEmbty);
 </script>
 
 <template>
@@ -39,7 +38,7 @@ const isEmpty = computed(() => MovieStore.isEmbty);
     <div v-if="isLoading">Loading Movies...</div>
     <!-- empty state -->
     <UEmpty
-      v-else-if="isEmpty"
+      v-if="MovieStore.isEmpty"
       :avatar="{
         src: 'https://github.com/nuxt.png',
       }"
