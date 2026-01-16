@@ -5,7 +5,9 @@ export const useMovieStore = defineStore("movieStore", {
   state: () => ({
     movies: [],
     isLoading: false,
-  }),
+  }
+  
+),
   getters: {
     totalCount() {
       return this.movies.length;
@@ -43,8 +45,8 @@ export const useMovieStore = defineStore("movieStore", {
     async addMovie(newMovie) {
       try {
         const api = "http://localhost:2727/movies";
-        await axios.post(api, newMovie);
-        this.movies.push(newMovie);
+        const res =await axios.post(api, newMovie);
+        this.movies.push(res.data);
       } catch (error) {
         return error;
       }
@@ -64,7 +66,7 @@ export const useMovieStore = defineStore("movieStore", {
       try {
         const api = "http://localhost:2727/movies/";
         await axios.put(`${api}${movie.id}`, movie);
-        this.getMovies();
+        await this.getMovies();
       } catch (error) {
         console.log(error);
       }
@@ -77,7 +79,7 @@ export const useMovieStore = defineStore("movieStore", {
           await axios.put(`${api}${movie.id}`, movie);
          
         }
-         this.movies.getMovies();
+         await this.getMovies();
       } catch (error) {
         console.log(error);
       }
