@@ -6,7 +6,7 @@ const MovieStore = useMovieStore();
 const isOpen = ref(false);
 const form = reactive({
  name : (""),
- description : (""),
+ description : ("No Description"),
  image : (""),
  rating : (0),
  genres : [],
@@ -28,7 +28,7 @@ const handleSubmit = async()=> {
 
 const movieSchema = z.object({
   name: z.string().min(1, "Name is required"),
-  description: z.string().min(10, "Description is too short"),
+  description: z.string(),
   image: z.url("Image must be a valid URL"),
   rating: z.number().min(0).max(5),
   genres: z.array(z.string()).min(1, "Select at least one genre"),
