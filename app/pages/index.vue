@@ -14,9 +14,12 @@ const isEmpty = computed(() => MovieStore.isEmbty);
   >
     <!-- header -->
     <UiHeader />
+    <div class="flex gap-3 lg:ml-auto">
     <UiBtn @click="filter = 'all'" title="All Movies" />
     <UiBtn @click="filter = 'inTheatersMovies'" title="In Theaters" />
 
+    </div>
+   
     <!-- filter  -->
     <div v-if="filter==='inTheatersMovies'"
     >
