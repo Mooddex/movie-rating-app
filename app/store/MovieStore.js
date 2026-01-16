@@ -5,9 +5,9 @@ export const useMovieStore = defineStore("movieStore", {
   state: () => ({
     movies: [],
     isLoading: false,
-  }
-  
-),
+  }),
+  persist: true,
+
   getters: {
     totalCount() {
       return this.movies.length;
