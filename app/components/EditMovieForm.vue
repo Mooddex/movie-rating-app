@@ -91,7 +91,7 @@ const movieSchema = z.object({
               v-model="form.genres"
               type="select"
               name="genre"
-              multiple="4"
+              multiple
               class="w-full border active:border-blue-700 border-gray-400 shadow-2xl rounded-lg p-3 bg-black"
             >
               <option value="action">Action</option>
