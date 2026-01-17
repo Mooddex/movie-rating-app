@@ -4,7 +4,7 @@ import type { FormSubmitEvent } from "@nuxt/ui";
 import {useMovies} from "~/composable/useMovies";
 
 const MovieStore = useMovies();
-
+const isSubmitting = ref(false)
 
 const toast = useToast();
 const genreOptions = ['Drama','Action','Comedy','Horror']
@@ -42,6 +42,8 @@ const state = reactive<Partial<Schema>>({
 });
 
  async function onSubmit(event: FormSubmitEvent<Schema>) {
+  if (isSubmitting.value) return;
+    isSubmitting.value = true;
   try {
     await MovieStore.editMovie({ id: props.movie?.id,...event.data });
   console.log(event.data);
@@ -51,15 +53,18 @@ const state = reactive<Partial<Schema>>({
     color: "success",
   });
    open.value = false
+   
   } catch (error) {
     console.log(error);
     toast.add({
     title: "Error",
-    description: `${event.data.name} has been Edited.`,
+    description: `${event.data.name} has failed to Edited.`,
     color: "error",
   });
     
-  } 
+  } finally{
+    isSubmitting.value = false;
+  }
 }
 </script>
 
@@ -97,7 +102,9 @@ const state = reactive<Partial<Schema>>({
 
    
 
-    <UButton type="submit"> Submit </UButton>
+    <UButton type="submit" :loading="isSubmitting" :disabled="isSubmitting"> 
+      {{ isSubmitting ? 'Submitting...' : 'Submit' }}
+       </UButton>
   </UForm>
   </template>
   </UModal>

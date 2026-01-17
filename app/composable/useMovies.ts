@@ -8,10 +8,10 @@ export interface Movie {
   inTheaters: boolean ;
   genres: string[];
 }
+const movies = ref<Movie[]>([]);
+  const isLoading = ref(false);
 
 export const useMovies = () => {
-  const movies = ref<Movie[]>([]);
-  const isLoading = ref(false);
 
   const totalCount = computed(() => movies.value.length);
   const isEmpty = computed(() => totalCount.value === 0 ? true : false);

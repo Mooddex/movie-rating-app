@@ -31,8 +31,9 @@ const handleDelete = () => {
           await MovieStore.deleteMovie(props.movie); 
           toast.add({ 
             title: "Movie Deleted",
-            description: `${props.movie.name} has been removed Refresh the page please `,
-            color: "green"
+            description: `${props.movie.name} has been removed  `,
+            color: "green",
+            t
           });
           
         },
