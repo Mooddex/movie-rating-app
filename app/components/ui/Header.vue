@@ -1,7 +1,10 @@
 <script setup>
-import { useMovieStore } from "@/store/MovieStore";
+import {useMovies} from "~/composable/useMovies";
 
-const MovieStore = useMovieStore();
+const MovieStore = useMovies();
+onMounted(() => {
+  MovieStore.getMovies();
+});
 </script>
 
 <template>

@@ -1,34 +1,45 @@
 <script setup>
-import { useMovieStore } from "@/store/MovieStore";
+import { useMovies } from "~/composable/useMovies";
 import EditMovieForm from "../EditMovieForm.vue";
+
+const MovieStore = useMovies();
+const toast = useToast();
+
+onMounted(() => {
+  MovieStore.getMovies();
+});
 
 const props = defineProps(["movie"]);
 
-const toast = useToast();
-const MovieStore = useMovieStore();
-const rating = ref(props.movie.rating);
-
 const updateRating = async (newRating) => {
-  rating.value = newRating;
-
-  await MovieStore.editMovie({ ...props.movie, rating: newRating });
+  await MovieStore.editMovie({ 
+    ...props.movie, 
+    rating: newRating 
+  });
+ 
 };
-const handleDelete = (id) => {
+
+const handleDelete = () => {
   toast.add({
     title: "Confirmation",
     description: "Are you sure you want to delete this movie?",
     actions: [
       {
         label: "Yes",
-        color: "primary",
-        onClick: async() => {
-        await MovieStore.deleteMovie(id);   
-          return toast.add({ title: "Delete Request succeeded" });
+        color: "red",
+        onClick: async () => {
+          await MovieStore.deleteMovie(props.movie); 
+          toast.add({ 
+            title: "Movie Deleted",
+            description: `${props.movie.name} has been removed Refresh the page please `,
+            color: "green"
+          });
+          
         },
       },
       {
-        label: "no",
-        color: "warning",
+        label: "Cancel",
+        color: "gray",
       },
     ],
   });
@@ -58,11 +69,11 @@ const handleDelete = (id) => {
 
       <div class="flex gap-2 flex-wrap">
         <p
-          v-for="gener in movie.genres"
-          :key="gener"
+          v-for="genre in movie.genres"
+          :key="genre"
           class="px-3 w-fit bg-indigo-500 text-white rounded-full"
         >
-          {{ gener }}
+          {{ genre }}
         </p>
       </div>
 
@@ -79,13 +90,11 @@ const handleDelete = (id) => {
           />
         </div>
         <div class="mt-auto space-x-3">
-          <!-- edit -->
           <EditMovieForm :movie="movie" />
-          <!-- delete -->
           <UButton
             icon="i-heroicons:trash-solid"
             class="bg-gray-300 hover:bg-gray-500 rounded-full p-2 cursor-pointer"
-            @click="handleDelete(movie.id)"
+            @click="handleDelete"
           />
         </div>
       </div>
